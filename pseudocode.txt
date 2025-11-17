@@ -1,0 +1,176 @@
+ALGORITMO: Sistema de Gestión de Plantas Premium (SGPP)
+
+ESTRUCTURAS DE DATOS ANIDADAS:
+
+  ESTRUCTURA CuidadosRequeridos
+    CADENA riegoMl[50]
+    CADENA horasLuz[30]
+    CADENA temperatura[30]
+    CADENA humedad[20]
+    CADENA fertilizante[50]
+  FIN_ESTRUCTURA
+
+  ESTRUCTURA EspecieBotanica
+    CADENA nombreCientifico[100]
+    CADENA nombreComun[100]
+    CADENA familia[50]
+    CADENA origen[50]
+    CuidadosRequeridos cuidados    // ANIDACIÓN NIVEL 1
+  FIN_ESTRUCTURA
+
+  ESTRUCTURA ProductoPlanta
+    CADENA idProducto[20]
+    CADENA categoria[50]
+    CADENA precio[20]
+    CADENA stock[10]
+    CADENA estatus[20]
+    EspecieBotanica especie        // ANIDACIÓN NIVEL 2
+  FIN_ESTRUCTURA
+
+VARIABLES GLOBALES:
+  ProductoPlanta catalogo[100]
+  ENTERO totalPlantas = 0
+
+PROCEDIMIENTO Principal
+  INICIO
+    InicializarDatos()
+    ENTERO opcion
+    
+    REPETIR
+      MostrarMenu()
+      LEER opcion
+      
+      SEGÚN opcion HACER
+        CASO 1: AltaPlanta()
+        CASO 2: BajaPlanta()
+        CASO 3: ModificacionPlanta()
+        CASO 4: ConsultaPlantas()
+        CASO 5: ESCRIBIR "Saliendo del sistema"
+        OTRO_CASO: ESCRIBIR "Opción inválida"
+      FIN_SEGÚN
+    HASTA_QUE opcion = 5
+  FIN
+
+PROCEDIMIENTO MostrarMenu
+  INICIO
+    ESCRIBIR "+--------------------------------------+"
+    ESCRIBIR "| SGPP - Vivero Encanto               |"
+    ESCRIBIR "+--------------------------------------+"
+    ESCRIBIR "| 1. Alta de Planta                   |"
+    ESCRIBIR "| 2. Baja de Planta                   |"
+    ESCRIBIR "| 3. Modificación de Planta           |"
+    ESCRIBIR "| 4. Consulta de Plantas              |"
+    ESCRIBIR "| 5. Salir                             |"
+    ESCRIBIR "+--------------------------------------+"
+    ESCRIBIR "Seleccione [1-5]: "
+  FIN
+
+PROCEDIMIENTO AltaPlanta
+  INICIO
+    SI totalPlantas >= 100 ENTONCES
+      ESCRIBIR "Error: Catálogo lleno"
+      RETORNAR
+    FIN_SI
+    
+    ProductoPlanta nueva
+    
+    ESCRIBIR "--- DATOS DEL PRODUCTO ---"
+    LEER nueva.idProducto
+    LEER nueva.categoria
+    LEER nueva.precio
+    LEER nueva.stock
+    LEER nueva.estatus
+    
+    ESCRIBIR "--- ESPECIE BOTÁNICA ---"
+    LEER nueva.especie.nombreCientifico
+    LEER nueva.especie.nombreComun
+    LEER nueva.especie.familia
+    LEER nueva.especie.origen
+    
+    ESCRIBIR "--- CUIDADOS REQUERIDOS ---"
+    LEER nueva.especie.cuidados.riegoMl
+    LEER nueva.especie.cuidados.horasLuz
+    LEER nueva.especie.cuidados.temperatura
+    LEER nueva.especie.cuidados.humedad
+    LEER nueva.especie.cuidados.fertilizante
+    
+    catalogo[totalPlantas] = nueva
+    totalPlantas = totalPlantas + 1
+    
+    ESCRIBIR "✓ Planta registrada exitosamente"
+  FIN
+
+PROCEDIMIENTO BajaPlanta
+  INICIO
+    CADENA idBuscar
+    ESCRIBIR "ID de planta a eliminar: "
+    LEER idBuscar
+    
+    ENTERO i
+    PARA i = 0 HASTA totalPlantas - 1 HACER
+      SI catalogo[i].idProducto = idBuscar ENTONCES
+        ESCRIBIR "Planta encontrada: ", catalogo[i].especie.nombreComun
+        CARACTER confirma
+        ESCRIBIR "¿Eliminar? (S/N): "
+        LEER confirma
+        
+        SI confirma = 'S' O confirma = 's' ENTONCES
+          // Desplazar elementos hacia la izquierda
+          ENTERO j
+          PARA j = i HASTA totalPlantas - 2 HACER
+            catalogo[j] = catalogo[j + 1]
+          FIN_PARA
+          totalPlantas = totalPlantas - 1
+          ESCRIBIR "✓ Planta eliminada"
+          RETORNAR
+        FIN_SI
+      FIN_SI
+    FIN_PARA
+    
+    ESCRIBIR "Planta no encontrada"
+  FIN
+
+PROCEDIMIENTO ModificacionPlanta
+  INICIO
+    CADENA idBuscar
+    ESCRIBIR "ID de planta a modificar: "
+    LEER idBuscar
+    
+    ENTERO i
+    PARA i = 0 HASTA totalPlantas - 1 HACER
+      SI catalogo[i].idProducto = idBuscar ENTONCES
+        ESCRIBIR "Planta: ", catalogo[i].especie.nombreComun
+        ESCRIBIR "1. Modificar Precio"
+        ESCRIBIR "2. Modificar Stock"
+        ESCRIBIR "3. Modificar Estatus"
+        
+        ENTERO opcion
+        LEER opcion
+        
+        SEGÚN opcion HACER
+          CASO 1: LEER catalogo[i].precio
+          CASO 2: LEER catalogo[i].stock
+          CASO 3: LEER catalogo[i].estatus
+        FIN_SEGÚN
+        
+        ESCRIBIR "✓ Modificación guardada"
+        RETORNAR
+      FIN_SI
+    FIN_PARA
+    
+    ESCRIBIR "Planta no encontrada"
+  FIN
+
+PROCEDIMIENTO ConsultaPlantas
+  INICIO
+    ESCRIBIR "--- CATÁLOGO DE PLANTAS ---"
+    
+    ENTERO i
+    PARA i = 0 HASTA totalPlantas - 1 HACER
+      ESCRIBIR "[", catalogo[i].idProducto, "] "
+      ESCRIBIR catalogo[i].especie.nombreComun
+      ESCRIBIR "  Precio: ", catalogo[i].precio
+      ESCRIBIR "  Stock: ", catalogo[i].stock
+      ESCRIBIR "  Riego: ", catalogo[i].especie.cuidados.riegoMl
+    FIN_PARA
+  FIN

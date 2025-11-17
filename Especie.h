@@ -1,0 +1,1 @@
+msbuild "TuProyecto.vcxproj" /t:Build /p:Configuration=Debug /p:Platform=x64

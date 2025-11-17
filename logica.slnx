@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="NaileaCatalogo/NaileaCatalogo.vcxproj" Id="339dd36c-9b6b-43bb-97aa-615267ee1cb5" />
+</Solution>
