@@ -139,4 +139,4 @@ Email: contacto@viveroencanto.com
 
 ---
 
-Desarrollado con 🌿 para clientes premium
+Desarrollado por Nailea Falcon con 🌿 <3  para la Universidad del Valle de México
